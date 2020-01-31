@@ -5,7 +5,6 @@
 Данный файл содержит в себе определения классов, используемых в программе
 */
 
-
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -32,13 +31,15 @@ public:
 };
 
 void worker(std::function<void(const commands&, const std::string)> f, std::queue<data_pack>& q,
-	std::condition_variable& cv, std::mutex& cv_m, std::atomic_bool& quit) {
+	std::condition_variable& cv, std::mutex& cv_m, std::atomic_bool& quit, std::shared_ptr<metric> m) {
 	while (!quit) {
 		std::unique_lock<std::mutex> lk(cv_m);
 		cv.wait(lk, [&]() {return !q.empty() || quit; });
 		if (!q.empty()) {
 			commands a = q.front()._command_pack;
 			std::string b = q.front()._time;
+			m->_block_ch += 1;
+			m->_cmd_ch += a.size();
 			//std::tie(a, b) = std::move(q.front());
 			q.pop();
 			lk.unlock();
@@ -48,7 +49,6 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 }
 
 void print_to_terminal(const commands& comm, const std::string&) {
-	console_m.lock();
 	std::cout << "Bulk: ";
 	bool first = true;
 	for (auto& command : comm) {
@@ -57,14 +57,12 @@ void print_to_terminal(const commands& comm, const std::string&) {
 		first = false;
 	}
 	std::cout << std::endl;
-	console_m.unlock();
 }
 
 void print_to_file(const commands& comm, const std::string& time) {
 	static int file_id = 11;
 	std::ofstream file;
-	//std::string path("bulk" + file_id + time + ".log");
-	std::string path("C:\\test\\bulk" + std::to_string(file_id) + time + ".log");
+	std::string path("bulk" + std::to_string(file_id) + time + ".log");
 	++file_id;
 	file.open(path);
 	for (auto& command : comm) {
@@ -81,14 +79,12 @@ void print_to_file(const commands& comm, const std::string& time) {
 
 class Observers {
 public:
-	//virtual void print(const commands&, const std::string) = 0;
 	virtual void print(const commands&, const std::string&) = 0;
 	virtual ~Observers() = default;
 
 	std::condition_variable _cv;
 	std::mutex _cv_m;
 	std::atomic_bool _quit = false;
-	
 };
 
 
@@ -99,18 +95,27 @@ public:
 
 class FileObserver : public Observers {
 public:
-	FileObserver(int a) :_thr_count(a) {
-		while (_thr_count) {
-			_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_file),
+	FileObserver(std::shared_ptr<metric> file1, std::shared_ptr<metric> file2):_file1(file1), _file2(file2) {
+
+		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_file),
 				std::ref(_data),
 				std::ref(_cv),
 				std::ref(_cv_m),
-				std::ref(_quit)));
-			--_thr_count;
-		}
+				std::ref(_quit),
+				_file1
+		));
+		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_file),
+				std::ref(_data),
+				std::ref(_cv),
+				std::ref(_cv_m),
+				std::ref(_quit),
+				_file2
+		));
 	}
 
 	~FileObserver() {
+		_quit = true;
+		_cv.notify_all();
 		for (auto& v : _vtr) {
 			if (v.joinable())
 				v.join();
@@ -124,8 +129,8 @@ public:
 
 	std::vector<std::thread> _vtr;
 	std::queue<data_pack> _data;
-	int _thr_count;
-	//metric _metrick;
+	std::shared_ptr<metric> _file1;
+	std::shared_ptr<metric> _file2;
 };
 
 
@@ -136,23 +141,24 @@ public:
 
 class TerminalObserver : public Observers {
 public:
-	TerminalObserver() {
+	TerminalObserver(std::shared_ptr<metric> log):_log(log) {
 		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_terminal),
 			std::ref(_data),
 			std::ref(_cv),
 			std::ref(_cv_m),
-			std::ref(_quit)));
-		//console_m.lock();
+			std::ref(_quit),
+			log));
+		console_m.lock();
 	}
 
 	~TerminalObserver() {
-		
+		_quit = true;
+		_cv.notify_all();
 		for (auto& v : _vtr) {
-			_cv.notify_all();
 			if (v.joinable())
 				v.join();
 		}
-		//console_m.unlock();
+		console_m.unlock();
 	}
 
 	virtual void print(const commands& comm, const std::string& time) {
@@ -162,6 +168,7 @@ public:
 
 	std::queue<data_pack> _data;
 	std::vector<std::thread> _vtr;
-
-	//metric _metrick;
+	std::shared_ptr<metric> _log;
 };
+
+
