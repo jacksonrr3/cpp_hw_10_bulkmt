@@ -10,7 +10,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <memory>
 #include <utility>
 #include <algorithm>
 #include <ctime>
@@ -24,38 +23,31 @@ using observers = std::vector<std::unique_ptr<Observers>>;
 *
 */
 class Command {
-	metric& _m_main;
-
+	std::shared_ptr<metric> _m_main;
 	observers _obs;
 	commands _comm;
-
 	int _block_size;
 	int _comm_counter = 0;
 	std::string _time;
-
 	
 public:
-	Command(int N, metric& main):_block_size(N), _m_main(main){}
+	Command(int N, std::shared_ptr<metric> m_main):_block_size(N), _m_main(m_main){}
 
 	void subscribe(std::unique_ptr<Observers>&& obs) {
 		_obs.emplace_back(std::move(obs));
 	}
 
 	void setTime() {
-		std::time_t temp_time;
-		temp_time = std::time(0);
-		std::stringstream ss;
-		ss << temp_time;
-		ss >> _time;
+		std::time_t temp_time = std::time(0);
+		_time = std::to_string(temp_time);
 	}
 
 	void notify() {
 		for (auto& u : _obs) {
 			u->print(_comm, _time);
-		  //u->add_data(_comm, _time);
 		}
-		_m_main._block_ch += 1;
-		_m_main._cmd_ch += _comm.size();
+		_m_main->_block_ch += 1;
+		_m_main->_cmd_ch += _comm.size();
 		_comm.clear();
 		_time.clear();
 	}
@@ -65,7 +57,7 @@ public:
 		std::string s;
 		while (std::getline(std::cin, s)) {
 			if (std::cin.eof()) { return; }
-			_m_main._str_ch += 1;
+			_m_main->_str_ch += 1;
 			if (s[0] == '{') {
 				++bracket_counter;
 				continue;
@@ -78,7 +70,7 @@ public:
 					return;
 				}
 			}
-
+			
 			else {
 				if (_comm.empty()) { setTime(); }
 				_comm.push_back(s);
@@ -90,10 +82,9 @@ public:
 		std::string s;
 		while (std::getline(std::cin, s)) {
 			if (std::cin.eof()) {
-				//notify();
 				break;
 			}
-			_m_main._str_ch += 1;
+			_m_main->_str_ch += 1;
 			if (s[0] == '{') {
 				if (_comm_counter) {
 					notify();
