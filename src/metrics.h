@@ -13,7 +13,7 @@ public:
 	std::string _name;
 	const bool _is_main;
 	
-	metric( const std::string name, bool is_main = false):_is_main(is_main), _name(name) {}
+	metric( const std::string name, bool is_main = false): _name(name), _is_main(is_main) {}
 
 	~metric() {
 		console_m.lock();
