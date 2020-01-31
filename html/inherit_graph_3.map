@@ -1,0 +1,5 @@
+<map id="Иерархия классов. Графический вид." name="Иерархия классов. Графический вид.">
+<area shape="rect" id="node1" href="$classObservers.html" title="базовый класс, для реализации классов вывода команд " alt="" coords="5,31,92,57"/>
+<area shape="rect" id="node2" href="$classFileObserver.html" title="класс реализующий функцию вывода команд в файл " alt="" coords="157,5,257,32"/>
+<area shape="rect" id="node3" href="$classTerminalObserver.html" title="класс реализующий функцию вывода команд в консоль " alt="" coords="140,56,273,83"/>
+</map>

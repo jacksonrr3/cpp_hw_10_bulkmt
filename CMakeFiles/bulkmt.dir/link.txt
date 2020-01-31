@@ -1,0 +1,1 @@
+/usr/local/clang-7.0.0/bin/clang++    -rdynamic -fsanitize=thread CMakeFiles/bulkmt.dir/src/main.cpp.o  -o bulkmt -lpthread 
