@@ -31,7 +31,7 @@ public:
 
 void worker(std::function<void(const commands&, const std::string)> f, std::queue<data_pack>& q,
 	std::condition_variable& cv, std::mutex& cv_m, std::atomic_bool& quit, std::shared_ptr<metric> m) {
-	while (!quit) {
+	while (true) {
 		std::unique_lock<std::mutex> lk(cv_m);
 		cv.wait(lk, [&]() {return !q.empty() || quit; });
 		if (quit && q.empty()) { return; }
