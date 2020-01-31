@@ -16,6 +16,11 @@ set_target_properties(bulkmt PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
     COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
+    LINK_FLAGS "-fsanitize=thread"
+)
+
+target_link_libraries(bulkmt
+    Threads::Threads
 )
 
 install(TARGETS bulkmt RUNTIME DESTINATION bin)
