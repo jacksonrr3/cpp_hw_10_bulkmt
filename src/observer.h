@@ -125,7 +125,10 @@ public:
 	}
 
 	virtual void print(const commands& comm, const std::string& time) {
-		_data.emplace(data_pack{comm, time});
+		{
+			std::lock_guard<std::mutex> lk(_cv_m);
+			_data.emplace(data_pack{ comm, time });
+		}
 		_cv.notify_one();
 	}
 
@@ -164,7 +167,10 @@ public:
 	}
 
 	virtual void print(const commands& comm, const std::string& time) {
-		_data.emplace(data_pack{ comm, time });
+		{
+			std::lock_guard<std::mutex> lk(_cv_m);
+			_data.emplace(data_pack{ comm, time });
+		}
 		_cv.notify_one();
 	}
 
