@@ -12,4 +12,5 @@ int main(int, char* argv[]) {
 	command_log.subscribe(std::make_unique<TerminalObserver>(m_log));
 	command_log.add_command();
 	
+	
 }
