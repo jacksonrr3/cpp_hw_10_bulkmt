@@ -49,6 +49,7 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 }
 
 void print_to_terminal(const commands& comm, const std::string&) {
+	console_m.lock();
 	std::cout << "Bulk: ";
 	bool first = true;
 	for (auto& command : comm) {
@@ -57,6 +58,7 @@ void print_to_terminal(const commands& comm, const std::string&) {
 		first = false;
 	}
 	std::cout << std::endl;
+	console_m.unlock();
 }
 
 void print_to_file(const commands& comm, const std::string& time) {
@@ -148,7 +150,7 @@ public:
 			std::ref(_cv_m),
 			std::ref(_quit),
 			log));
-		console_m.lock();
+		
 	}
 
 	~TerminalObserver() {
@@ -158,7 +160,7 @@ public:
 			if (v.joinable())
 				v.join();
 		}
-		console_m.unlock();
+		
 	}
 
 	virtual void print(const commands& comm, const std::string& time) {
