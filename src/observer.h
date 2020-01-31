@@ -34,12 +34,12 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 	while (!quit) {
 		std::unique_lock<std::mutex> lk(cv_m);
 		cv.wait(lk, [&]() {return !q.empty() || quit; });
-		while (!q.empty()) {
+		if (quit && q.empty()) { return; }
+		if (!q.empty()) {
 			commands a = q.front()._command_pack;
 			std::string b = q.front()._time;
 			m->_block_ch += 1;
 			m->_cmd_ch += a.size();
-			//std::tie(a, b) = std::move(q.front());
 			q.pop();
 			lk.unlock();
 			f(a, b);
