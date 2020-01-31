@@ -1,4 +1,3 @@
-#pragma once
 /**
 \file
 \brief Заголовочный файл с описанием классов
@@ -35,7 +34,7 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 	while (!quit) {
 		std::unique_lock<std::mutex> lk(cv_m);
 		cv.wait(lk, [&]() {return !q.empty() || quit; });
-		if (!q.empty()) {
+		while (!q.empty()) {
 			commands a = q.front()._command_pack;
 			std::string b = q.front()._time;
 			m->_block_ch += 1;
@@ -49,7 +48,7 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 }
 
 void print_to_terminal(const commands& comm, const std::string&) {
-	//console_m.lock();
+	console_m.lock();
 	std::cout << "Bulk: ";
 	bool first = true;
 	for (auto& command : comm) {
@@ -58,7 +57,7 @@ void print_to_terminal(const commands& comm, const std::string&) {
 		first = false;
 	}
 	std::cout << std::endl;
-	//console_m.unlock();
+	console_m.unlock();
 }
 
 void print_to_file(const commands& comm, const std::string& time) {

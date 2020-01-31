@@ -16,7 +16,7 @@ public:
 	metric( const std::string name, bool is_main = false): _name(name), _is_main(is_main) {}
 
 	~metric() {
-		//console_m.lock();
+		console_m.lock();
 		std::cout << _name << " thread - ";
 		if (_is_main) { 
 			
@@ -29,6 +29,6 @@ public:
 			std::cout << _block_ch << " blok, " << _cmd_ch << " command." << std::endl;
 			
 		}
-		//console_m.unlock();
+		console_m.unlock();
 	}
 };
