@@ -20,7 +20,7 @@ set_target_properties(bulkmt PROPERTIES
 )
 
 target_link_libraries(bulkmt
-    Threads::Threads
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 install(TARGETS bulkmt RUNTIME DESTINATION bin)
