@@ -8,6 +8,7 @@ std::int64_t fib(int a) {
 	}
 }
 
+
 std::int64_t fac(int a) {
 	if (a == 0) { return 1; }
 	else {
