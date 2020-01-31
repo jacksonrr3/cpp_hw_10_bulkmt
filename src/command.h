@@ -1,11 +1,8 @@
-#pragma once
 /**
 \file
 \brief Заголовочный файл с описанием классов
 Данный файл содержит в себе определения основного класса, используемого в программе
 */
-
-
 
 #pragma once
 #include <vector>
@@ -16,19 +13,19 @@
 #include <sstream>
 #include "observer.h"
 
-
 using observers = std::vector<std::unique_ptr<Observers>>;
 /**
 * @brief Основной класс, реализующий функционал считывания команд из стандартного ввода и распределения на блоки команд
 *
 */
 class Command {
-	std::shared_ptr<metric> _m_main;
+	
 	observers _obs;
 	commands _comm;
 	int _block_size;
 	int _comm_counter = 0;
 	std::string _time;
+	std::shared_ptr<metric> _m_main;
 	
 public:
 	Command(int N, std::shared_ptr<metric> m_main):_block_size(N), _m_main(m_main){}
