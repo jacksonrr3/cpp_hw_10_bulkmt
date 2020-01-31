@@ -49,7 +49,7 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 }
 
 void print_to_terminal(const commands& comm, const std::string&) {
-	console_m.lock();
+	//console_m.lock();
 	std::cout << "Bulk: ";
 	bool first = true;
 	for (auto& command : comm) {
@@ -58,7 +58,7 @@ void print_to_terminal(const commands& comm, const std::string&) {
 		first = false;
 	}
 	std::cout << std::endl;
-	console_m.unlock();
+	//console_m.unlock();
 }
 
 void print_to_file(const commands& comm, const std::string& time) {
