@@ -178,7 +178,7 @@ public:
 
 	std::queue<data_pack> _data;
 	std::vector<std::thread> _vtr;
-	std::shared_ptr<Metric> _log = std::make_shared<Metric>("log");;
+	std::shared_ptr<Metric> _log = std::make_shared<Metric>("log");
 };
 
 
