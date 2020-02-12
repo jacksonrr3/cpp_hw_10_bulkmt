@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['metric',['metric',['../classmetric.html',1,'']]]
+  ['metric',['Metric',['../classMetric.html',1,'']]]
 ];

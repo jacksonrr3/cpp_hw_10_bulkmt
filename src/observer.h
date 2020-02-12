@@ -30,7 +30,7 @@ public:
 };
 
 void worker(std::function<void(const commands&, const std::string)> f, std::queue<data_pack>& q,
-	std::condition_variable& cv, std::mutex& cv_m, std::atomic_bool& quit, std::shared_ptr<metric> m) {
+	std::condition_variable& cv, std::mutex& cv_m, std::atomic_bool& quit, std::shared_ptr<Metric> m) {
 	while (true) {
 		std::unique_lock<std::mutex> lk(cv_m);
 		cv.wait(lk, [&]() {return !q.empty() || quit; });
@@ -48,7 +48,7 @@ void worker(std::function<void(const commands&, const std::string)> f, std::queu
 }
 
 void print_to_terminal(const commands& comm, const std::string&) {
-	console_m.lock();
+	std::lock_guard<std::mutex> l_g(console_m);
 	std::cout << "Bulk: ";
 	bool first = true;
 	for (auto& command : comm) {
@@ -57,7 +57,6 @@ void print_to_terminal(const commands& comm, const std::string&) {
 		first = false;
 	}
 	std::cout << std::endl;
-	console_m.unlock();
 }
 
 void print_to_file(const commands& comm, const std::string& time) {
@@ -71,7 +70,6 @@ void print_to_file(const commands& comm, const std::string& time) {
 	}
 	file.close();
 }
-
 
 /**
 * @brief базовый класс, для реализации классов вывода команд
@@ -96,28 +94,32 @@ public:
 
 class FileObserver : public Observers {
 public:
-	FileObserver(std::shared_ptr<metric> file1, std::shared_ptr<metric> file2):_file1(file1), _file2(file2) {
+	FileObserver() {
 
 		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_file),
 				std::ref(_data),
 				std::ref(_cv),
 				std::ref(_cv_m),
 				std::ref(_quit),
-				_file1
+				std::ref(_file1)
 		));
 		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_file),
 				std::ref(_data),
 				std::ref(_cv),
 				std::ref(_cv_m),
 				std::ref(_quit),
-				_file2
+				std::ref(_file2)
 		));
+
+		v_m.emplace_back(_file1);
+		v_m.emplace_back(_file2);
 	}
 
 	~FileObserver() {
 		_quit = true;
 		_cv.notify_all();
 		for (auto& v : _vtr) {
+			
 			if (v.joinable())
 				v.join();
 		}
@@ -133,8 +135,8 @@ public:
 
 	std::vector<std::thread> _vtr;
 	std::queue<data_pack> _data;
-	std::shared_ptr<metric> _file1;
-	std::shared_ptr<metric> _file2;
+	std::shared_ptr<Metric> _file1 = std::make_shared<Metric>("File1");
+	std::shared_ptr<Metric> _file2 = std::make_shared<Metric>("File2");
 };
 
 
@@ -145,24 +147,25 @@ public:
 
 class TerminalObserver : public Observers {
 public:
-	TerminalObserver(std::shared_ptr<metric> log):_log(log) {
+	TerminalObserver() {
 		_vtr.emplace_back(std::thread(worker, std::function<void(const commands&, const std::string&)>(print_to_terminal),
 			std::ref(_data),
 			std::ref(_cv),
 			std::ref(_cv_m),
 			std::ref(_quit),
-			log));
-		
+			std::ref(_log)));
+		//console_m.lock();
+		v_m.emplace_back(_log);
 	}
 
 	~TerminalObserver() {
 		_quit = true;
 		_cv.notify_all();
+		//console_m.unlock();
 		for (auto& v : _vtr) {
 			if (v.joinable())
 				v.join();
 		}
-		
 	}
 
 	virtual void print(const commands& comm, const std::string& time) {
@@ -175,7 +178,7 @@ public:
 
 	std::queue<data_pack> _data;
 	std::vector<std::thread> _vtr;
-	std::shared_ptr<metric> _log;
+	std::shared_ptr<Metric> _log = std::make_shared<Metric>("log");
 };
 
 

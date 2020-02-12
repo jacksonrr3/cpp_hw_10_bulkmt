@@ -37,6 +37,10 @@ iostream
 -
 mutex
 -
+vector
+-
+memory
+-
 
 /home/travis/build/jacksonrr3/cpp_hw_10_bulkmt/src/observer.h
 iostream

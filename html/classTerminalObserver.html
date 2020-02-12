@@ -116,8 +116,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
-<tr class="memitem:a0eb60c6cb2710d7e02c7a9238290b89f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#a0eb60c6cb2710d7e02c7a9238290b89f">TerminalObserver</a> (std::shared_ptr&lt; <a class="el" href="classmetric.html">metric</a> &gt; log)</td></tr>
-<tr class="separator:a0eb60c6cb2710d7e02c7a9238290b89f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6defa0521ff92fc500a70e2f6c448ad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#ae6defa0521ff92fc500a70e2f6c448ad">TerminalObserver</a> ()</td></tr>
+<tr class="separator:ae6defa0521ff92fc500a70e2f6c448ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0daa49ea37636923460d991b0796e545"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#a0daa49ea37636923460d991b0796e545">~TerminalObserver</a> ()</td></tr>
 <tr class="separator:a0daa49ea37636923460d991b0796e545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c258ec6853dbbb680a6c909546e189b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#a0c258ec6853dbbb680a6c909546e189b">print</a> (const <a class="el" href="observer_8h.html#a0db4f840172346de9d20f0b361e9e5b0">commands</a> &amp;comm, const std::string &amp;time)</td></tr>
@@ -132,8 +132,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
 <tr class="separator:a2fc14121b0b2e386223835d7a1f17841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa523e14a076873c3565a62acff1f308"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::thread &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#aaa523e14a076873c3565a62acff1f308">_vtr</a></td></tr>
 <tr class="separator:aaa523e14a076873c3565a62acff1f308"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14a73d1bfd7652a25ee0e45306b54ba3"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classmetric.html">metric</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#a14a73d1bfd7652a25ee0e45306b54ba3">_log</a></td></tr>
-<tr class="separator:a14a73d1bfd7652a25ee0e45306b54ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6321dfbc436bae78db378c9ab672650b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classMetric.html">Metric</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTerminalObserver.html#a6321dfbc436bae78db378c9ab672650b">_log</a> = std::make_shared&lt;<a class="el" href="classMetric.html">Metric</a>&gt;(&quot;log&quot;)</td></tr>
+<tr class="separator:a6321dfbc436bae78db378c9ab672650b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classObservers"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classObservers')"><img src="closed.png" alt="-"/>&#160;Открытые атрибуты унаследованные от <a class="el" href="classObservers.html">Observers</a></td></tr>
 <tr class="memitem:aa4e1c70635ac9d129829cdf671732a9e inherit pub_attribs_classObservers"><td class="memItemLeft" align="right" valign="top">std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classObservers.html#aa4e1c70635ac9d129829cdf671732a9e">_cv</a></td></tr>
 <tr class="separator:aa4e1c70635ac9d129829cdf671732a9e inherit pub_attribs_classObservers"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,7 +145,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><p>класс реализующий функцию вывода команд в консоль </p>
 </div><h2 class="groupheader">Конструктор(ы)</h2>
-<a class="anchor" id="a0eb60c6cb2710d7e02c7a9238290b89f"></a>
+<a class="anchor" id="ae6defa0521ff92fc500a70e2f6c448ad"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -155,8 +155,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
         <tr>
           <td class="memname">TerminalObserver::TerminalObserver </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classmetric.html">metric</a> &gt;&#160;</td>
-          <td class="paramname"><em>log</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -242,12 +241,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
 
 </div>
 </div>
-<a class="anchor" id="a14a73d1bfd7652a25ee0e45306b54ba3"></a>
+<a class="anchor" id="a6321dfbc436bae78db378c9ab672650b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classmetric.html">metric</a>&gt; TerminalObserver::_log</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classMetric.html">Metric</a>&gt; TerminalObserver::_log = std::make_shared&lt;<a class="el" href="classMetric.html">Metric</a>&gt;(&quot;log&quot;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
