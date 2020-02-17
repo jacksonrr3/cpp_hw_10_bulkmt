@@ -22,11 +22,11 @@ public:
 		std::cout << _name << " thread - ";
 		if (_is_main) { 
 			std::cout << _str_ch << " string, " << _cmd_ch << " command, " <<
-			_block_ch << " blok." << std::endl; 
+			_block_ch << " block." << std::endl; 
 		}
 		else {
 			
-			std::cout << _block_ch << " blok, " << _cmd_ch << " command." << std::endl;
+			std::cout << _block_ch << " block, " << _cmd_ch << " command." << std::endl;
 		}
 		console_m.unlock();
 	}
