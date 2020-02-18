@@ -2,9 +2,9 @@
 #include <cstdint>
 
 std::int64_t fib(int a) {
-	if (a == 0 || a == 1) { return 0; }
+	if (a == 0 || a == 1) { return a; }
 	else {
-		return fib(a - 1) + fib(a - 2);
+		return (fib(a - 1) + fib(a - 2));
 	}
 }
 
