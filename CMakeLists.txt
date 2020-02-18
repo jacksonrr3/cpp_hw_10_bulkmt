@@ -15,7 +15,7 @@ add_executable(bulkmt ${SOURCES} ${SOURCES_LIB_1} ${SOURCES_LIB_2} ${SOURCES_LIB
 set_target_properties(bulkmt PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
-    COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
+    COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra;-fsanitize=thread"
     LINK_FLAGS "-fsanitize=thread"
 )
 
